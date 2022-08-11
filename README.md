@@ -4,5 +4,5 @@ The simplest Express server I could think to make that reads an incoming file fr
 
 Just run
 
-`npm install`
-`npm run dev`
+    npm install
+    npm run dev
