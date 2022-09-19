@@ -63,6 +63,8 @@ app.post('/upload', uploadMiddleware.single('gregFile'), function (req, res) {
 
     // Now we can do something with the file data
     let text = fs.readFileSync(req.file.path).toString('UTF8');
+    const text_arr = text.split(/r?\n/);
+    console.log(text_arr);
     console.log("File contents:");
     console.log(text);
     console.log(""); // newline
@@ -74,6 +76,7 @@ app.post('/upload', uploadMiddleware.single('gregFile'), function (req, res) {
     }
     if (text.includes("Hi")) {
         response.greeting = "Hello to you, too!"
+        console.log("Hello to you, too!");
     }
 
     // Finish the request with an HTTP 200 code and an informative message, so we don't leave user
