@@ -64,6 +64,15 @@ app.post('/upload', uploadMiddleware.single('gregFile'), function (req, res) {
     // Now we can do something with the file data
     let text = fs.readFileSync(req.file.path).toString('UTF8');
     const text_arr = text.split(/\r?\n/);
+
+    for (var i = 0; i < text_arr.length; i++) {
+
+        if (text_arr[i] === 'Damaged packet') {
+            text_arr.splice(i, 1);
+            i--;
+        }
+    }
+
     console.log(text_arr);
     //console.log("File contents:");
     //console.log(text);
