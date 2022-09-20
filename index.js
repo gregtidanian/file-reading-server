@@ -63,11 +63,11 @@ app.post('/upload', uploadMiddleware.single('gregFile'), function (req, res) {
 
     // Now we can do something with the file data
     let text = fs.readFileSync(req.file.path).toString('UTF8');
-    const text_arr = text.split(/r?\n/);
+    const text_arr = text.split(/\r?\n/);
     console.log(text_arr);
-    console.log("File contents:");
-    console.log(text);
-    console.log(""); // newline
+    //console.log("File contents:");
+    //console.log(text);
+    //console.log(""); // newline
 
     // And even use that in our response to the client
     let response = {
