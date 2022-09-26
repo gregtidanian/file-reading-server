@@ -4,7 +4,7 @@ import express from "express";
 import multer from "multer";
 import fs from 'fs';
 import PCAPNGParser from 'pcap-ng-parser';
-
+const pcapNgParser = new PCAPNGParser()
 
 dotenv.config();
 
@@ -62,21 +62,31 @@ app.post('/upload', uploadMiddleware.single('gregFile'), function (req, res) {
     console.log('The file is %s bytes in size.', req.file.size);
 
     // Now we can do something with the file data
-    let text = fs.readFileSync(req.file.path).toString('UTF8');
-    const text_arr = text.split(/\r?\n/);
+    //let text = fs.readFileSync(req.file.path).toString('UTF8');
 
-    for (var i = 0; i < text_arr.length; i++) {
+    let myFileStream = fs.createReadStream(req.file.path);
+
+    myFileStream.pipe(pcapNgParser)
+        .on('data', parsedPacket => {
+            console.log(parsedPacket)
+        })
+        .on('interface', interfaceInfo => {
+            console.log(interfaceInfo)
+        })
+
+    // Used this for sorting text files, could potnetially be useful with PCAPNG files    
+    /*for (var i = 0; i < text_arr.length; i++) {
 
         if (text_arr[i] === 'Damaged packet') {
             text_arr.splice(i, 1);
             i--;
         }
-    }
+    }*/
 
     console.log(text_arr);
-    //console.log("File contents:");
-    //console.log(text);
-    //console.log(""); // newline
+    console.log("File contents:");
+    console.log(text);
+    console.log(""); // newline
 
     // And even use that in our response to the client
     let response = {
